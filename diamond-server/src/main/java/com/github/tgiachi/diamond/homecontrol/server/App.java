@@ -21,7 +21,7 @@ public class App implements CommandLineRunner {
 
     public static void main(String[] args) {
         logger.info("Inizializing container");
-        SpringApplication.run(App.class, args);
+        var applicationContext = SpringApplication.run(App.class, args);
 
     }
 
