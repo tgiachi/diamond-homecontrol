@@ -3,38 +3,30 @@
  */
 package com.github.tgiachi.diamond.homecontrol.server;
 
-import com.github.tgiachi.diamond.homecontrol.api.annotations.DiamondComponent;
+
 import com.github.tgiachi.diamond.homecontrol.api.components.TestComponent;
 import com.github.tgiachi.diamond.homecontrol.api.utils.ReflectionUtils;
 import com.github.tgiachi.diamond.homecontrol.server.manager.DiamondServerManager;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.inject.se.SeContainerInitializer;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-public class App {
+@SpringBootApplication
+public class App implements CommandLineRunner {
     private static Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
         logger.info("Inizializing container");
-        SeContainerInitializer initializer = SeContainerInitializer.newInstance();
+        SpringApplication.run(App.class, args);
 
-        initializer = initializer.disableDiscovery();
-        initializer = initializer.addBeanClasses(ReflectionUtils.getAnnotationArray(ApplicationScoped.class));
-        initializer = initializer.addBeanClasses(ReflectionUtils.getAnnotationArray(RequestScoped.class));
-        initializer = initializer.addBeanClasses(ReflectionUtils.getAnnotationArray(DiamondComponent.class));
+    }
 
-
-        var container = initializer.initialize();
-
-        var manager = container.select(DiamondServerManager.class).get();
-        for (var i = 0; i< 10; i++){
-            var a = container.select(TestComponent.class).get();
-            a.test();
-        }
-
+    @Override
+    public void run(String... args) throws Exception {
 
     }
 }
