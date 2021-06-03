@@ -2,46 +2,29 @@ package com.github.tgiachi.diamond.homecontrol.api.components;
 
 
 import com.github.tgiachi.diamond.homecontrol.api.annotations.DiamondComponent;
+import com.github.tgiachi.diamond.homecontrol.api.annotations.ScheduledComponent;
+import com.github.tgiachi.diamond.homecontrol.api.data.ComponentPollResult;
+import com.github.tgiachi.diamond.homecontrol.api.interfaces.components.IDiamondComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 
 @Component
+@ScheduledComponent(seconds = 10)
 @DiamondComponent(name = "Test component", version = "1.0", description = "Test", category = "TEST")
-
-public class TestComponent implements Serializable {
+public class TestComponent implements IDiamondComponent {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    String t;
 
-    public TestComponent() {
-        logger.info("Initialized");
-        t = UUID.randomUUID().toString();
+    @Override
+    public boolean isPoll() {
+        return true;
     }
 
-    @Async
-    public CompletableFuture<String> testFuture(int delay) throws Exception {
-
-        logger.info("Starting task");
-        Thread.sleep(delay);
-
-        logger.info("Task Ended");
-
-        return CompletableFuture.completedFuture("ok");
-    }
-
-    public void start() {
-        logger.info("start");
-
-    }
-
-    public void test() {
-        logger.info("{}", t);
+    @Override
+    public ComponentPollResult<?> poll() {
+        logger.info("Boom");
+        return new ComponentPollResult<>();
     }
 }

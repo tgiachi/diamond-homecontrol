@@ -4,7 +4,6 @@
 package com.github.tgiachi.diamond.homecontrol.server;
 
 
-import com.github.tgiachi.diamond.homecontrol.api.components.TestComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -12,12 +11,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
-
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 public class App implements CommandLineRunner {
     private static ConfigurableApplicationContext applicationContext;
     private static Logger logger = LoggerFactory.getLogger(App.class);
@@ -25,22 +23,8 @@ public class App implements CommandLineRunner {
     public static void main(String[] args) throws Exception {
         logger.info("Initializing container");
         applicationContext = SpringApplication.run(App.class, args);
-        testContext();
     }
 
-    private static void testContext() throws Exception {
-        var test = applicationContext.getBean(TestComponent.class);
-        int min = 1000;
-        int max = 5000;
-
-        var cmpString = new ArrayList<CompletableFuture<String>>();
-        for (var i = 0; i < 20; i++) {
-            int random_int = (int) Math.floor(Math.random() * (max - min + 1) + min);
-            cmpString.add(test.testFuture(random_int));
-        }
-
-        CompletableFuture.allOf(cmpString.toArray(new CompletableFuture[0])).join();
-    }
 
     @Override
     public void run(String... args) throws Exception {
