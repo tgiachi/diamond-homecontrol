@@ -46,9 +46,8 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
         scanScriptClasses();
         runSyncScript(getScriptResource("/timeout.js"));
         runSyncScript(getScriptResource("/es-promise.js"));
-
-
         checkBootstrap();
+        scanScripts();
         logger.info("JS script engine is ready");
 
     }
@@ -56,7 +55,23 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
     private void buildBindings() {
         bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
         bindings.put("logger", LoggerFactory.getLogger("JsScript"));
+        bindings.put("context", applicationContext);
         engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+    }
+
+    private void scanScripts() {
+        var files = fileSystemService.listFiles("scripts", "js");
+        files.forEach(s -> {
+            if (!s.contains("bootstrap.js")) {
+                try {
+                    var scriptFile = new File(s);
+                    logger.info("Loading file: {}", scriptFile.getName());
+                    runThreadScript(FileUtils.readFileToString(scriptFile, StandardCharsets.UTF_8));
+                } catch (Exception ex) {
+                    logger.error("Error during load file: {}", s, ex);
+                }
+            }
+        });
     }
 
     private void scanScriptClasses() {
@@ -67,13 +82,6 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
         });
     }
 
-    private void runSyncScript(String script) {
-        try {
-            engine.eval(script);
-        } catch (Exception ex) {
-            logger.error("Error during execute script:", ex);
-        }
-    }
 
     private String getScriptResource(String filename) {
         try {
@@ -95,7 +103,7 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
         }
     }
 
-    private void runThreadScript(String content) {
+    public void runThreadScript(String content) {
         threadExecutor.execute(() -> {
             try {
                 var evalResult = engine.eval(content);
@@ -103,6 +111,14 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
                 logger.info("Error during execute script: {}", content, exception);
             }
         });
+    }
+
+    public void runSyncScript(String script) {
+        try {
+            engine.eval(script);
+        } catch (Exception ex) {
+            logger.error("Error during execute script:", ex);
+        }
     }
 
 

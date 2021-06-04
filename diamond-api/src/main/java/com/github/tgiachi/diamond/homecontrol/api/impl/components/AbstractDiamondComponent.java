@@ -20,7 +20,7 @@ public abstract class AbstractDiamondComponent<TConfig extends IDiamondComponent
     private boolean isPoll;
 
     @Override
-    public ComponentPollResult<?> poll() {
+    public ComponentPollResult<?> poll() throws Exception {
         return null;
     }
 

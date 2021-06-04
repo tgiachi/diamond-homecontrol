@@ -7,7 +7,7 @@ public interface IDiamondComponent<TConfig extends IDiamondComponentConfig> {
 
     boolean isPoll();
 
-    ComponentPollResult<?> poll();
+    ComponentPollResult<?> poll() throws Exception;
 
     void initConfig(TConfig config);
 

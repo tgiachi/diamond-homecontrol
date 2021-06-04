@@ -8,6 +8,7 @@ import com.github.tgiachi.diamond.homecontrol.api.interfaces.components.IDiamond
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.IConfigService;
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.IJobSchedulerService;
 import com.github.tgiachi.diamond.homecontrol.api.utils.ReflectionUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +80,6 @@ public class DiamondComponentsService extends AbstractDiamondService {
             } catch (Exception ex) {
                 logger.error("Error during init component: {}", annotation.name(), ex);
             }
-
         });
     }
 
@@ -97,7 +97,13 @@ public class DiamondComponentsService extends AbstractDiamondService {
 
     private Runnable parseComponentResult(IDiamondComponent component, String name) {
         return () -> {
-            var result = component.poll();
+            try {
+                var result = component.poll();
+
+                EventBus.getDefault().post(result);
+            } catch (Exception ex) {
+                logger.error("Error during poll component: {}", name, ex);
+            }
         };
     }
 

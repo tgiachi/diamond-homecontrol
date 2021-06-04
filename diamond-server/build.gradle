@@ -32,8 +32,11 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3'
     implementation 'org.openjdk.nashorn:nashorn-core:15.2'
+    implementation 'org.mongodb:mongodb-driver-sync:3.12.8'
+    implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.8'
 
 
+    implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
 
