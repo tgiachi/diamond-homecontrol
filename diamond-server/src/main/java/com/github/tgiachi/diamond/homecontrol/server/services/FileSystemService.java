@@ -39,8 +39,8 @@ public class FileSystemService extends AbstractDiamondService implements IFileSy
     }
 
     private void checkDirectory() {
-        if (System.getProperty("DIAMOND_HOME_DIRECTORY") != null) {
-            appDirectory = Paths.get(System.getProperty("DIAMOND_HOME_DIRECTORY"), rootDirectory).toString();
+        if (System.getenv("DIAMOND_HOME_DIRECTORY") != null) {
+            appDirectory = Paths.get(System.getenv("DIAMOND_HOME_DIRECTORY"), rootDirectory).toString();
         }
         logger.info("Application directory is {}", appDirectory);
         createDirectory("");

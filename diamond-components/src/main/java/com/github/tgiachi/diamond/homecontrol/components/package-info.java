@@ -1,1 +1,0 @@
-package com.github.tgiachi.diamond.homecontrol.components;

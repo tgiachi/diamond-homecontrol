@@ -42,15 +42,21 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
         fileSystemService.createDirectory("scripts");
         logger.info("Initializing JS script engine");
         engine = new NashornScriptEngineFactory().getScriptEngine("--language=es6");
-        bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        bindings.put("logger", LoggerFactory.getLogger("JsScript"));
-        engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+        buildBindings();
         scanScriptClasses();
         runSyncScript(getScriptResource("/timeout.js"));
+        runSyncScript(getScriptResource("/es-promise.js"));
+
 
         checkBootstrap();
         logger.info("JS script engine is ready");
 
+    }
+
+    private void buildBindings() {
+        bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.put("logger", LoggerFactory.getLogger("JsScript"));
+        engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
     }
 
     private void scanScriptClasses() {
