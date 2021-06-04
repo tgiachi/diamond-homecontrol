@@ -15,5 +15,7 @@ public class ComponentInfo {
 
     private Class<?> classz;
 
+    private boolean enabled;
+
     private IDiamondComponent component;
 }

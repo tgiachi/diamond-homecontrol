@@ -16,7 +16,11 @@ public class JobSchedulerService extends AbstractDiamondService implements IJobS
 
     @Override
     public void addJob(int seconds, Runnable task, String name) {
-        logger.info("Adding Job {} every {}", name, seconds);
+        if (seconds < 10) {
+            logger.warn("Mininum seconds for jobs is: 10");
+            seconds = 10;
+        }
+        logger.info("Adding Job {} every {} seconds", name, seconds);
         scheduledExecutorService.scheduleAtFixedRate(buildJob(task, name), seconds, seconds, TimeUnit.SECONDS);
     }
 
