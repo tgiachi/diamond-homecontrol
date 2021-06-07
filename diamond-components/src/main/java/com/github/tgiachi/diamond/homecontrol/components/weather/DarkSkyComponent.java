@@ -57,6 +57,7 @@ public class DarkSkyComponent extends AbstractDiamondComponent<DarkSkyConfig> {
         response.currently().apparentTemperature();
         var entity = new DarkSkyEntity();
         entity.setCurrentTemperature(response.currently().temperature());
+        response.currently().sunriseTime();
         var pollResult = new ComponentPollResult<DarkSkyEntity>();
         pollResult.setEntityClass(DarkSkyEntity.class);
         pollResult.setData(entity);

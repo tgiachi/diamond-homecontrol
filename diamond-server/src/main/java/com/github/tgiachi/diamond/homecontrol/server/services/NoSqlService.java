@@ -16,6 +16,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -46,6 +47,8 @@ public class NoSqlService extends AbstractDiamondService implements INoSqlServic
     @Override
     public <TEntity extends IBaseEntity> TEntity insert(TEntity entity, Class<TEntity> entityClass) {
         entity.setId(ObjectId.get());
+        entity.setCreatedDateTime(LocalDate.now());
+        entity.setUpdatedDateTime(LocalDate.now());
         var collection = mongoDatabase.getCollection(getCollectionName(entity.getClass()), entityClass);
         collection.insertOne(entity);
         return entity;

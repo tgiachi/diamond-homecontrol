@@ -19,9 +19,9 @@ public class EventServiceScript {
         this.eventService = eventService;
     }
 
-    public void addEvent(String eventName, Function<Object, Void> func) {
+    public void subscribeEvent(String eventName, Function<Object, Void> func) {
         logger.info("Adding event watcher for {}", eventName);
-        eventService.addEventListener(eventName, event -> func.apply(event));
+        eventService.addEventListener(eventName, func::apply);
     }
 
 }

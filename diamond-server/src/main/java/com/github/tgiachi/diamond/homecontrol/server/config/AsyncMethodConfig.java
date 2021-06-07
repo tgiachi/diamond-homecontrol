@@ -33,4 +33,17 @@ public class AsyncMethodConfig {
         executor.initialize();
         return executor;
     }
+
+    @Bean
+    @Qualifier("generalExecutor")
+    public Executor generalExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(20);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("Diamond_Thread-");
+        executor.initialize();
+
+        return executor;
+    }
 }

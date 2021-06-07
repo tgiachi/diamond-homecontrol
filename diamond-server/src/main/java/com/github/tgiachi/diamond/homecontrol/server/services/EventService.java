@@ -25,10 +25,12 @@ public class EventService extends AbstractDiamondService implements IEventServic
     @Getter
     private Map<String, List<IEventListener>> eventListeners = new HashMap<>();
 
+    private static final String ALL_EVENTS = "*";
+
     private final INoSqlService noSqlService;
     private final Executor threadPoolExecutor;
 
-    public EventService(INoSqlService noSqlService, @Qualifier("scriptExecutor") Executor executor) {
+    public EventService(INoSqlService noSqlService, @Qualifier("generalExecutor") Executor executor) {
         this.noSqlService = noSqlService;
         this.threadPoolExecutor = executor;
     }
@@ -49,6 +51,11 @@ public class EventService extends AbstractDiamondService implements IEventServic
     private void dispatchEvents(ComponentPollResult<? extends IBaseEntity> message) {
         if (eventListeners.containsKey(message.getEntityClass().getSimpleName())) {
             eventListeners.get(message.getEntityClass().getSimpleName()).stream().forEach(listener -> threadPoolExecutor.execute(() -> {
+                listener.onEvent(message.getData());
+            }));
+        }
+        if (eventListeners.containsKey(ALL_EVENTS)) {
+            eventListeners.get(ALL_EVENTS).stream().forEach(listener -> threadPoolExecutor.execute(() -> {
                 listener.onEvent(message.getData());
             }));
         }
