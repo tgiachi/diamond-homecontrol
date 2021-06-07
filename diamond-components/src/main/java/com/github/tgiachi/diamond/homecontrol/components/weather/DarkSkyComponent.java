@@ -52,11 +52,18 @@ public class DarkSkyComponent extends AbstractDiamondComponent<DarkSkyConfig> {
 
     @Override
     public ComponentPollResult<?> poll() throws Exception {
-        logger.info("Checking weather");
+
         var response = dsClient.sendForecastRequest(request);
         response.currently().apparentTemperature();
         var entity = new DarkSkyEntity();
         entity.setCurrentTemperature(response.currently().temperature());
-        return ComponentPollResult.builder().data(entity).status(ComponentPollResultType.SUCCESS).build();
+        var pollResult = new ComponentPollResult<DarkSkyEntity>();
+        pollResult.setEntityClass(DarkSkyEntity.class);
+        pollResult.setData(entity);
+        pollResult.setStatus(ComponentPollResultType.SUCCESS);
+
+        logger.info("Checking weather: {}", entity.getCurrentTemperature());
+
+        return pollResult;
     }
 }
