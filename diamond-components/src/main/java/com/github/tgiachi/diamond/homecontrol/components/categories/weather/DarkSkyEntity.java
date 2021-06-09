@@ -1,4 +1,4 @@
-package com.github.tgiachi.diamond.homecontrol.components.weather;
+package com.github.tgiachi.diamond.homecontrol.components.categories.weather;
 
 import com.github.tgiachi.diamond.homecontrol.api.annotations.EventEntity;
 import com.github.tgiachi.diamond.homecontrol.api.entities.BaseEntity;

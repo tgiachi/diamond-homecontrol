@@ -1,4 +1,4 @@
-package com.github.tgiachi.diamond.homecontrol.components.weather;
+package com.github.tgiachi.diamond.homecontrol.components.categories.weather;
 
 import ch.rasc.darksky.DsClient;
 import ch.rasc.darksky.model.DsForecastRequest;

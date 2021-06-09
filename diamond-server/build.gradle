@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation project(":diamond-api")
     implementation project(":diamond-components")
+    implementation project(":diamond-scripts")
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'commons-io:commons-io:2.9.0'
     implementation ('org.springframework.boot:spring-boot-starter-web') {
