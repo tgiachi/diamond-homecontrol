@@ -5,11 +5,12 @@ import lombok.Data;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class BaseEntity implements IBaseEntity {
 
     private ObjectId id;
-    private LocalDate createdDateTime;
-    private LocalDate updatedDateTime;
+    private LocalDateTime createdDateTime;
+    private LocalDateTime updatedDateTime;
 }

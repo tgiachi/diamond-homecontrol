@@ -3,6 +3,7 @@ package com.github.tgiachi.diamond.homecontrol.api.interfaces.entities;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface IBaseEntity {
 
@@ -10,12 +11,12 @@ public interface IBaseEntity {
 
     ObjectId getId();
 
-    void setCreatedDateTime(LocalDate dateTime);
+    void setCreatedDateTime(LocalDateTime dateTime);
 
-    LocalDate getCreatedDateTime();
+    LocalDateTime getCreatedDateTime();
 
-    void setUpdatedDateTime(LocalDate dateTime);
+    void setUpdatedDateTime(LocalDateTime dateTime);
 
-    LocalDate getUpdatedDateTime();
+    LocalDateTime getUpdatedDateTime();
 
 }
