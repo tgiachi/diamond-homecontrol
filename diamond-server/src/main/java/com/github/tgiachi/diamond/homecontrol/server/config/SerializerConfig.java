@@ -7,13 +7,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import java.text.SimpleDateFormat;
+
 @Configuration
 public class SerializerConfig {
 
     @Bean
     @Primary
     ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
+        var mapper = new ObjectMapper();
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+        return mapper.findAndRegisterModules();
     }
 
     @Bean

@@ -16,8 +16,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -63,7 +63,18 @@ public class NoSqlService extends AbstractDiamondService implements INoSqlServic
 
     @Override
     public <TEntity extends IBaseEntity> List<TEntity> findAll(Class<TEntity> entityClass) {
-        return null;
+        var collection = mongoDatabase.getCollection(getCollectionName(entityClass), entityClass);
+        var list = new ArrayList<TEntity>();
+        var cursor = collection.find().iterator();
+        try {
+            while (cursor.hasNext()) {
+                list.add(cursor.next());
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return list;
     }
 
     private String getCollectionName(Class<?> entityClass) {

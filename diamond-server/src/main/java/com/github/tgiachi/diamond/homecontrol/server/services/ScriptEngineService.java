@@ -113,12 +113,14 @@ public class ScriptEngineService extends AbstractDiamondService implements IScri
         });
     }
 
-    public void runSyncScript(String script) {
+    public Object runSyncScript(String script) {
         try {
-            engine.eval(script);
+            return engine.eval(script);
         } catch (Exception ex) {
             logger.error("Error during execute script:", ex);
+            return null;
         }
+
     }
 
 

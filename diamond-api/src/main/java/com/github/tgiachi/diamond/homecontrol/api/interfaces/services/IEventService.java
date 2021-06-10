@@ -10,6 +10,7 @@ public interface IEventService extends IDiamondService {
 
     Map<String, List<IEventListener>> getEventListeners();
 
+    Map<String, Class<?>> getCollectionsName();
 
     void addEventListener(String eventName, IEventListener listener);
 

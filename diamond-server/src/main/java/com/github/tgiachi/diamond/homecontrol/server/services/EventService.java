@@ -1,5 +1,6 @@
 package com.github.tgiachi.diamond.homecontrol.server.services;
 
+import com.github.tgiachi.diamond.homecontrol.api.annotations.EventEntity;
 import com.github.tgiachi.diamond.homecontrol.api.data.ComponentPollResult;
 import com.github.tgiachi.diamond.homecontrol.api.impl.events.EventTrackEntity;
 import com.github.tgiachi.diamond.homecontrol.api.impl.services.AbstractDiamondService;
@@ -7,6 +8,7 @@ import com.github.tgiachi.diamond.homecontrol.api.interfaces.entities.IBaseEntit
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.events.IEventListener;
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.IEventService;
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.INoSqlService;
+import com.github.tgiachi.diamond.homecontrol.api.utils.ReflectionUtils;
 import lombok.Getter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,6 +29,9 @@ public class EventService extends AbstractDiamondService implements IEventServic
     @Getter
     private Map<String, List<IEventListener>> eventListeners = new HashMap<>();
 
+    @Getter
+    private Map<String, Class<?>> collectionsName = new HashMap<>();
+
     private static final String ALL_EVENTS = "*";
 
     private final INoSqlService noSqlService;
@@ -41,7 +46,15 @@ public class EventService extends AbstractDiamondService implements IEventServic
     @Override
     public void onStart() {
         super.onStart();
+        scanEventsAnnotations();
         EventBus.getDefault().register(this);
+    }
+
+    private void scanEventsAnnotations() {
+        ReflectionUtils.getAnnotation(EventEntity.class).forEach(c -> {
+            var annotation = c.getAnnotation(EventEntity.class);
+            collectionsName.put(annotation.name(), c);
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
@@ -77,6 +90,7 @@ public class EventService extends AbstractDiamondService implements IEventServic
     public void onStop() {
         EventBus.getDefault().unregister(this);
     }
+
 
     @Override
     public void addEventListener(String eventName, IEventListener listener) {

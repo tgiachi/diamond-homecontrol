@@ -6,5 +6,5 @@ public interface IScriptEngineService extends IDiamondService {
 
     void runThreadScript(String content);
 
-    void runSyncScript(String script);
+    Object runSyncScript(String script);
 }

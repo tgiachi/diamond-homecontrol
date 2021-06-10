@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @DiamondComponent(configClass = DarkSkyConfig.class, name = "DarkSky Weather", category = ComponentTypes.WEATHER, version = "1.0", description = "Get weather information")
-@ScheduledComponent(seconds = 10)
+@ScheduledComponent(seconds = 300)
 public class DarkSkyComponent extends AbstractDiamondComponent<DarkSkyConfig> {
 
     private final DiamondConfig config;

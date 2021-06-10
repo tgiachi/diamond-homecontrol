@@ -6,8 +6,10 @@ import com.github.tgiachi.diamond.homecontrol.api.data.ComponentInfo;
 import com.github.tgiachi.diamond.homecontrol.api.impl.services.AbstractDiamondService;
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.components.IDiamondComponent;
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.IConfigService;
+import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.IDiamondComponentsService;
 import com.github.tgiachi.diamond.homecontrol.api.interfaces.services.IJobSchedulerService;
 import com.github.tgiachi.diamond.homecontrol.api.utils.ReflectionUtils;
+import lombok.Getter;
 import org.greenrobot.eventbus.EventBus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DiamondComponentsService extends AbstractDiamondService {
+public class DiamondComponentsService extends AbstractDiamondService implements IDiamondComponentsService {
 
+    @Getter
     private List<ComponentInfo> diamondComponents = new ArrayList<>();
 
     private final ApplicationContext applicationContext;
