@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "mongodb.url",
+      "type": "java.lang.String",
+      "description": "Description for mongodb.url."
+    },
+    {
+      "name": "diamond.mqtt.server.enabled",
+      "type": "java.lang.String",
+      "description": "Description for diamond.mqtt.server.enabled."
+    },
+    {
+      "name": "diamond.mqtt.server.url",
+      "type": "java.lang.String",
+      "description": "Description for diamond.mqtt.server.url."
+    }
+  ] }

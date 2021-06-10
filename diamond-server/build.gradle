@@ -24,7 +24,7 @@ dependencies {
     implementation project(":diamond-scripts")
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'commons-io:commons-io:2.9.0'
-    implementation ('org.springframework.boot:spring-boot-starter-web') {
+    implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
     }
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
@@ -34,19 +34,15 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3'
     implementation 'org.openjdk.nashorn:nashorn-core:15.2'
     implementation 'org.mongodb:mongodb-driver-sync:3.12.8'
-    implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.8'
+    implementation 'org.mongodb:mongo-java-driver:3.12.8'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
 
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
 
-
-
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.1'
-
-
 
 
 }

@@ -16,5 +16,5 @@ public class ComponentPollResult<TEntity extends IBaseEntity> implements Seriali
     private TEntity data;
     private ComponentPollResultType status;
     private Exception exception;
-    private Class<TEntity> entityClass;
+    private Class<? extends TEntity> entityClass;
 }

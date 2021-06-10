@@ -15,12 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 @Service
 public class MqttClientService extends AbstractDiamondService implements IMqttClientService {
@@ -66,9 +64,6 @@ public class MqttClientService extends AbstractDiamondService implements IMqttCl
                 connec.waitForCompletion();
                 isConnected = true;
                 logger.info("Connected to {}", mqttServerUrl);
-                subscribeTopic("#", (topic, message) -> {
-                    logger.info("Message: topic: {} -> {}", topic, message);
-                });
             } catch (Exception ex) {
                 logger.error("Error during connect to Mqtt server: {}", mqttServerUrl, ex);
             }
@@ -104,10 +99,16 @@ public class MqttClientService extends AbstractDiamondService implements IMqttCl
 
     @Override
     public void subscribeTopic(String topic, IMqttMessageListener listener) {
-        if (!listeners.containsKey(topic)) {
-            listeners.put(topic, new ArrayList<>());
+        var cleanTopic = topic;
+
+        if (topic.endsWith("#")) {
+            cleanTopic = cleanTopic.replace("#", "");
         }
-        if (listeners.get(topic).size() == 0) {
+
+        if (!listeners.containsKey(cleanTopic)) {
+            listeners.put(cleanTopic, new ArrayList<>());
+        }
+        if (listeners.get(cleanTopic).size() == 0) {
             try {
                 var token = mqttAsyncClient.subscribe(topic, 0, this::dispatchMessages);
                 token.waitForCompletion();
@@ -115,26 +116,28 @@ public class MqttClientService extends AbstractDiamondService implements IMqttCl
                 logger.error("Error during subscribe topic {}", topic, ex);
             }
         }
-        listeners.get(topic).add(listener);
+        listeners.get(cleanTopic).add(listener);
     }
 
     private void dispatchMessages(String topic, MqttMessage message) {
         var strMessage = new String(message.getPayload());
-        if (listeners.containsKey(topic)) {
-            var listenerToNotify = listeners.get(topic);
-            listenerToNotify.forEach(l -> {
-                threadPool.execute(() -> {
-                    l.onMessage(topic, strMessage);
-                });
+        var listenerToNotify = parseTopic(topic);
+        listenerToNotify.forEach(l -> {
+            threadPool.execute(() -> {
+                l.onMessage(topic, strMessage);
             });
-        }
+        });
         if (listeners.containsKey("#")) {
-            var listenerToNotify = listeners.get("#");
-            listenerToNotify.forEach(l -> {
+            var notifyAll = listeners.get("#");
+            notifyAll.forEach(l -> {
                 threadPool.execute(() -> {
                     l.onMessage(topic, strMessage);
                 });
             });
         }
+    }
+
+    private List<IMqttMessageListener> parseTopic(String inputTopic) {
+        return listeners.keySet().stream().filter(inputTopic::startsWith).map(listeners::get).flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

@@ -8,6 +8,7 @@ import com.github.tgiachi.diamond.homecontrol.api.annotations.ScheduledComponent
 import com.github.tgiachi.diamond.homecontrol.api.data.ComponentPollResult;
 import com.github.tgiachi.diamond.homecontrol.api.data.ComponentPollResultType;
 import com.github.tgiachi.diamond.homecontrol.api.data.ComponentTypes;
+import com.github.tgiachi.diamond.homecontrol.api.data.config.DiamondConfig;
 import com.github.tgiachi.diamond.homecontrol.api.impl.components.AbstractDiamondComponent;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,13 @@ import org.springframework.stereotype.Service;
 @ScheduledComponent(seconds = 10)
 public class DarkSkyComponent extends AbstractDiamondComponent<DarkSkyConfig> {
 
+    private final DiamondConfig config;
+
     private DsClient dsClient;
     private DsForecastRequest request;
 
-    public DarkSkyComponent() {
+    public DarkSkyComponent(DiamondConfig config) {
+        this.config = config;
         setPoll(true);
     }
 
@@ -27,6 +31,7 @@ public class DarkSkyComponent extends AbstractDiamondComponent<DarkSkyConfig> {
     public DarkSkyConfig getDefaultConfig() {
         return new DarkSkyConfig();
     }
+
 
     @Override
     public void initConfig(DarkSkyConfig config) {
@@ -37,8 +42,8 @@ public class DarkSkyComponent extends AbstractDiamondComponent<DarkSkyConfig> {
     @Override
     public boolean start() {
         request = DsForecastRequest.builder()
-                .latitude("46.93011019")
-                .longitude("7.5635394")
+                .latitude(Double.toString(config.getHomeLatitude()))
+                .longitude(Double.toString(config.getHomeLatitude()))
                 .unit(DsUnit.SI)
                 .build();
 
