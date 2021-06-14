@@ -20,6 +20,8 @@ dependencies {
 
     implementation project(":diamond-api")
     implementation group: 'org.springframework', name: 'spring-context', version: '5.3.7'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
     implementation "ch.rasc:darksky:2.0.1"
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13'
